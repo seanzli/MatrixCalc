@@ -1,29 +1,26 @@
 #include <cmath>
 #include <algorithm>
-#include <memory>
+#include <vector>
 
 class MatrixCalc {
 public:
-    MatrixCalc() {m_data == nullptr;};
+    MatrixCalc() {};
     MatrixCalc(unsigned row, unsigned col) :
     m_row(row), m_col(col) 
     {
-         m_data = new double[m_row * m_col]();
-         m_size = m_row * m_col;
+        m_size = m_row * m_col;
+        m_data.resize(m_size);
     }
 
     MatrixCalc(unsigned row, unsigned col, const double a[]) :
     m_row(row), m_col(col) 
     {
-        m_data = new double[m_row * m_col]();
-        memcpy(m_data, a, sizeof(double)*row*col);
         m_size = m_row * m_col;
+        m_data.resize(m_size);
+        m_data = std::vector(a, a + m_size);
     }
 
-    ~MatrixCalc() {
-        if (m_data != nullptr)
-            delete m_data;
-    };
+    ~MatrixCalc() {};
 
     inline unsigned rows() const {return m_row;}
     inline unsigned cols() const {return m_col;}
@@ -119,6 +116,6 @@ public:
 private:
     unsigned m_row, m_col;
     unsigned m_size;
-    double* m_data;
+    std::vector<double> m_data;
 
 };
