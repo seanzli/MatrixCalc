@@ -1,6 +1,8 @@
 #include <cmath>
 #include <algorithm>
 #include <vector>
+#include <iostream>
+#include <cstdio>
 
 class MatrixCalc {
 public:
@@ -12,12 +14,20 @@ public:
         m_data.resize(m_size);
     }
 
+    MatrixCalc(double a[], unsigned row, unsigned col) :
+    m_row(row), m_col(col) 
+    {
+        m_size = m_row * m_col;
+        m_data.resize(m_size);
+        m_data = std::vector<double>(a, a + m_size);
+    }
+
     MatrixCalc(unsigned row, unsigned col, const double a[]) :
     m_row(row), m_col(col) 
     {
         m_size = m_row * m_col;
         m_data.resize(m_size);
-        m_data = std::vector(a, a + m_size);
+        m_data = std::vector<double>(a, a + m_size);
     }
 
     ~MatrixCalc() {};
@@ -68,7 +78,7 @@ public:
     {
         MatrixCalc out(m_row, m_col);
         if (op.rows() != m_row || op.cols() != m_col)
-            return;
+            return out;
         for (int i = 0; i < this->size(); i++) {
             out[i] = this->m_data[i] + op[i];
         }
@@ -79,7 +89,7 @@ public:
     {
         MatrixCalc out(m_row, m_col);
         if (op.rows() != m_row || op.cols() != m_col)
-            return;
+            return out;
         for (int i = 0; i < this->size(); i++) {
             out[i] = this->m_data[i] - op[i];
         }
@@ -110,6 +120,17 @@ public:
             return out;
         for (int i = 0; i < m_size; i++)
             out[i] = op[i] * m_data[i];
+        return out;
+    }
+
+    friend std::ostream &operator<<(std::ostream& out ,const MatrixCalc& op)
+    {
+        for (int i = 0; i < op.rows(); i++) {
+            for (int j = 0; j < op.cols(); j++) {
+                out << op(i, j) << ',';
+            }
+            out << std::endl;
+        }
         return out;
     }
 
