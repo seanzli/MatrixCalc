@@ -161,7 +161,7 @@ public:
     }
 
     MatrixCalc operator/(MatrixCalc & op) {
-        return (*this).inv() * op;
+        return (*this) * op.inv();
     }
 
     MatrixCalc operator/(const double& op) const
