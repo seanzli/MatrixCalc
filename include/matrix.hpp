@@ -231,7 +231,7 @@ public:
         for (int i = 0; i < m_row; i++) {
             double sum = 0.0;
             for (int j = 0; j < m_col; j++) {
-                sum += (*this)[i,j];
+                sum += (*this)(i,j);
             }
             out[i] = sum;
         }
@@ -244,7 +244,7 @@ public:
         for (int i = 0; i < m_col; i++) {
             double sum = 0.0;
             for (int j = 0; j < m_row; j++) {
-                sum += (*this)[j,i];
+                sum += (*this)(j,i);
             }
             out[i] = sum;
         }
