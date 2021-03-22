@@ -4,6 +4,7 @@
 #include <iostream>
 #include <cstdio>
 #include <memory>
+#include <numeric>
 
 class MatrixCalc {
 public:
@@ -40,6 +41,11 @@ public:
     double operator()(const unsigned& idx) const
     {
         return idx >= this->size() ? 0.0 : m_data[idx];
+    }
+
+    double& operator()(const unsigned& idx)
+    {
+        return m_data[idx];
     }
 
     double operator()(const unsigned& row, const unsigned& col) const
@@ -150,7 +156,8 @@ public:
         return out;
     }
 
-    MatrixCalc inv() {
+    MatrixCalc inv()
+    {
         MatrixCalc out(m_row, m_col);
         double* in = m_data.data();
         double* out_temp = out.m_data.data();
@@ -160,7 +167,8 @@ public:
         return out;
     }
 
-    MatrixCalc operator/(MatrixCalc & op) {
+    MatrixCalc operator/(MatrixCalc & op) 
+    {
         return (*this) * op.inv();
     }
 
@@ -204,6 +212,74 @@ public:
     {
         MatrixCalc out(row, col);
         out.m_data = std::vector<double>(row*col, INT_MAX);
+        return out;
+    }
+
+    double sum() const
+    {
+        return std::accumulate(m_data.begin(), m_data.end(), 0.0);
+    }
+    
+    double mean() const
+    {
+        return this->sum() / m_size;
+    }
+
+    MatrixCalc sum_row() const
+    {
+        MatrixCalc out(m_row, 1);
+        for (int i = 0; i < m_row; i++) {
+            double sum = 0.0;
+            for (int j = 0; j < m_col; j++) {
+                sum += (*this)[i,j];
+            }
+            out[i] = sum;
+        }
+    }
+
+    MatrixCalc sum_col() const
+    {
+        MatrixCalc out(1, m_col);
+        for (int i = 0; i < m_col; i++) {
+            double sum = 0.0;
+            for (int j = 0; j < m_row; j++) {
+                sum += (*this)[j,i];
+            }
+            out[i] = sum;
+        }
+    }
+
+    MatrixCalc mean_row() const
+    {
+        MatrixCalc out = (*this).sum_row();
+        for (int i = 0; i < m_row; i++)
+            out[i] /= m_col;
+        return out;
+    }
+
+    MatrixCalc mean_col() const
+    {
+        MatrixCalc out = (*this).sum_col();
+        for (int i = 0; i < m_col; i++)
+            out[i] /= m_row;
+        return out;
+    }
+
+    MatrixCalc getRow(unsigned row) const
+    {
+        MatrixCalc out(1, m_col);
+        for (int i = 0; i < m_col; i++) {
+            out[i] = (*this)(row, i);
+        }
+        return out;
+    }
+
+    MatrixCalc getCol(unsigned col) const
+    {
+        MatrixCalc out(m_row, 1);
+        for (int i = 0; i < m_row; i++) {
+            out[i] = (*this)(i, col);
+        }
         return out;
     }
 
