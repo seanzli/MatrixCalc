@@ -235,6 +235,7 @@ public:
             }
             out[i] = sum;
         }
+        return out;
     }
 
     MatrixCalc sum_col() const
@@ -247,6 +248,7 @@ public:
             }
             out[i] = sum;
         }
+        return out;
     }
 
     MatrixCalc mean_row() const
