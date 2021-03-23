@@ -70,6 +70,17 @@ public:
         return m_data[idx];
     }
 
+    bool operator==(const MatrixCalc& op) const
+    {
+        if (m_col != op.cols() || m_row != op.rows())
+            return false;
+        for (int i = 0; i < m_size; i++) {
+            if ((*this)(i) != op(i))
+                return false;
+        }
+        return true;
+    }
+
     MatrixCalc T() const
     {
         MatrixCalc out(m_col, m_row);
