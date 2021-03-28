@@ -296,6 +296,44 @@ public:
         return out;
     }
 
+    double std() const
+    {
+        double _mean = this->mean();
+        double sum = 0.0;
+        for (int i = 0; i < m_size; i++) {
+            sum += (m_data[i] - _mean);
+        }
+        return sum / (m_size - 1);
+    }
+
+    MatrixCalc std_row() const
+    {
+        MatrixCalc _mean = this->mean_row();
+        int row = _mean.rows();
+        MatrixCalc res(row, 1);
+        for (int i = 0; i < m_row; i++) {
+            for (int j = 0; j < m_col; j++) {
+                res[i] += ((*this)(i, j) - _mean(i));
+            }
+            res[i] /= (m_col - 1);
+        }
+        return res;
+    }
+
+    MatrixCalc std_col() const
+    {
+        MatrixCalc _mean = this->mean_col();
+        int col = _mean.cols();
+        MatrixCalc res(1, col);
+        for (int j = 0; j < m_col; j++) {
+            for (int i = 0; i < m_row; i++) {
+                res[j] += ((*this)(i, j) - _mean(j));
+            }
+            res[j] /= (m_row - 1);
+        }
+        return res;
+    }
+
     friend std::ostream &operator<<(std::ostream& out ,const MatrixCalc& op)
     {
         for (int i = 0; i < op.rows(); i++) {
