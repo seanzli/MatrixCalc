@@ -5,6 +5,7 @@
 #include <cstdio>
 #include <memory>
 #include <numeric>
+#include <string.h>
 
 class MatrixCalc {
 public:
@@ -74,7 +75,7 @@ public:
     {
         if (m_col != op.cols() || m_row != op.rows())
             return false;
-        for (int i = 0; i < m_size; i++) {
+        for (auto i = 0; i < m_size; i++) {
             if ((*this)(i) != op(i))
                 return false;
         }
@@ -84,8 +85,8 @@ public:
     MatrixCalc T() const
     {
         MatrixCalc out(m_col, m_row);
-        for (int i = 0; i < m_row; i++) {
-            for (int j = 0; j < m_col; j++) {
+        for (auto i = 0; i < m_row; i++) {
+            for (auto j = 0; j < m_col; j++) {
                 out(j, i) = m_data[i * m_col + j];
             }
         }
@@ -97,7 +98,7 @@ public:
         MatrixCalc out(m_row, m_col);
         if (op.rows() != m_row || op.cols() != m_col)
             return out;
-        for (int i = 0; i < this->size(); i++) {
+        for (auto i = 0; i < this->size(); i++) {
             out[i] = this->m_data[i] + op[i];
         }
         return out;
@@ -106,7 +107,7 @@ public:
     MatrixCalc operator+(const double& op) const
     {
         MatrixCalc out(m_row, m_col);
-        for (int i = 0; i < this->size(); i++) {
+        for (auto i = 0; i < this->size(); i++) {
             out[i] = this->m_data[i] + op;
         }
         return out;
@@ -117,7 +118,7 @@ public:
         MatrixCalc out(m_row, m_col);
         if (op.rows() != m_row || op.cols() != m_col)
             return out;
-        for (int i = 0; i < this->size(); i++) {
+        for (auto i = 0; i < this->size(); i++) {
             out[i] = this->m_data[i] - op[i];
         }
         return out;
@@ -125,7 +126,7 @@ public:
     MatrixCalc operator-(const double& op) const
     {
         MatrixCalc out(m_row, m_col);
-        for (int i = 0; i < this->size(); i++) {
+        for (auto i = 0; i < this->size(); i++) {
             out[i] = this->m_data[i] - op;
         }
         return out;
@@ -137,8 +138,8 @@ public:
 
         if (m_col != op.rows())
             return out;
-        for (int i = 0; i < m_row; i++) {
-            for (int j = 0; j < op.cols(); j++) {
+        for (auto i = 0; i < m_row; i++) {
+            for (auto j = 0; j < op.cols(); j++) {
                 for (int k = 0; k < m_col; k++) {
                     out(i, j) += m_data[i * m_col + k] * op(k, j);
                 }
@@ -150,7 +151,7 @@ public:
     MatrixCalc operator*(const double& op) const
     {
         MatrixCalc out(m_row, m_col);
-        for (int i = 0; i < this->size(); i++) {
+        for (auto i = 0; i < this->size(); i++) {
             out[i] = this->m_data[i] * op;
         }
         return out;
@@ -162,7 +163,7 @@ public:
 
         if (m_col != op.cols() || m_row != op.rows())
             return out;
-        for (int i = 0; i < m_size; i++)
+        for (auto i = 0; i < m_size; i++)
             out[i] = op[i] * m_data[i];
         return out;
     }
@@ -206,7 +207,7 @@ public:
     static MatrixCalc eye(unsigned row)
     {
         MatrixCalc out(row, row);
-        for (int i = 0; i < row; i++)
+        for (auto i = 0; i < row; i++)
             out(i,i) = 1;
         return out;
     }
@@ -214,7 +215,7 @@ public:
     static MatrixCalc eye(unsigned row, unsigned col)
     {
         MatrixCalc out(row, col);
-        for (int i = 0; i < std::min(row, col); i++)
+        for (auto i = 0; i < std::min(row, col); i++)
             out(i,i) = 1;
         return out;
     }
@@ -222,7 +223,7 @@ public:
     static MatrixCalc inf(unsigned row, unsigned col)
     {
         MatrixCalc out(row, col);
-        out.m_data = std::vector<double>(row*col, INT_MAX);
+        out.m_data = std::vector<double>(row*col, INT64_MAX);
         return out;
     }
 
@@ -239,9 +240,9 @@ public:
     MatrixCalc sum_row() const
     {
         MatrixCalc out(m_row, 1);
-        for (int i = 0; i < m_row; i++) {
+        for (auto i = 0; i < m_row; i++) {
             double sum = 0.0;
-            for (int j = 0; j < m_col; j++) {
+            for (auto j = 0; j < m_col; j++) {
                 sum += (*this)(i,j);
             }
             out[i] = sum;
@@ -252,9 +253,9 @@ public:
     MatrixCalc sum_col() const
     {
         MatrixCalc out(1, m_col);
-        for (int i = 0; i < m_col; i++) {
+        for (auto i = 0; i < m_col; i++) {
             double sum = 0.0;
-            for (int j = 0; j < m_row; j++) {
+            for (auto j = 0; j < m_row; j++) {
                 sum += (*this)(j,i);
             }
             out[i] = sum;
@@ -265,7 +266,7 @@ public:
     MatrixCalc mean_row() const
     {
         MatrixCalc out = (*this).sum_row();
-        for (int i = 0; i < m_row; i++)
+        for (auto i = 0; i < m_row; i++)
             out[i] /= m_col;
         return out;
     }
@@ -273,7 +274,7 @@ public:
     MatrixCalc mean_col() const
     {
         MatrixCalc out = (*this).sum_col();
-        for (int i = 0; i < m_col; i++)
+        for (auto i = 0; i < m_col; i++)
             out[i] /= m_row;
         return out;
     }
@@ -281,7 +282,7 @@ public:
     MatrixCalc getRow(unsigned row) const
     {
         MatrixCalc out(1, m_col);
-        for (int i = 0; i < m_col; i++) {
+        for (auto i = 0; i < m_col; i++) {
             out[i] = (*this)(row, i);
         }
         return out;
@@ -290,7 +291,7 @@ public:
     MatrixCalc getCol(unsigned col) const
     {
         MatrixCalc out(m_row, 1);
-        for (int i = 0; i < m_row; i++) {
+        for (auto i = 0; i < m_row; i++) {
             out[i] = (*this)(i, col);
         }
         return out;
@@ -300,7 +301,7 @@ public:
     {
         double _mean = this->mean();
         double sum = 0.0;
-        for (int i = 0; i < m_size; i++) {
+        for (auto i = 0; i < m_size; i++) {
             sum += (m_data[i] - _mean);
         }
         return sum / (m_size - 1);
@@ -311,8 +312,8 @@ public:
         MatrixCalc _mean = this->mean_row();
         int row = _mean.rows();
         MatrixCalc res(row, 1);
-        for (int i = 0; i < m_row; i++) {
-            for (int j = 0; j < m_col; j++) {
+        for (auto i = 0; i < m_row; i++) {
+            for (auto j = 0; j < m_col; j++) {
                 res[i] += ((*this)(i, j) - _mean(i));
             }
             res[i] /= (m_col - 1);
@@ -325,8 +326,8 @@ public:
         MatrixCalc _mean = this->mean_col();
         int col = _mean.cols();
         MatrixCalc res(1, col);
-        for (int j = 0; j < m_col; j++) {
-            for (int i = 0; i < m_row; i++) {
+        for (auto j = 0; j < m_col; j++) {
+            for (auto i = 0; i < m_row; i++) {
                 res[j] += ((*this)(i, j) - _mean(j));
             }
             res[j] /= (m_row - 1);
@@ -336,8 +337,8 @@ public:
 
     friend std::ostream &operator<<(std::ostream& out ,const MatrixCalc& op)
     {
-        for (int i = 0; i < op.rows(); i++) {
-            for (int j = 0; j < op.cols(); j++) {
+        for (auto i = 0; i < op.rows(); i++) {
+            for (auto j = 0; j < op.cols(); j++) {
                 out << op(i, j) << ',';
             }
             out << std::endl;
