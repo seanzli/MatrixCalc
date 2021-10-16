@@ -362,8 +362,12 @@ private:
         memcpy(LU, M, sizeof(double)*nDim*nDim);
 
         // LU decomposition 
-        if (LU_Decom( LU, Indx, nDim) == false)
+        if (LU_Decom( LU, Indx, nDim) == false) {
+            delete[] LU;
+            delete[] b;
+            delete[] Indx;
             return false;
+        }
 
         // Solve Ax=b for  unit vectors b_1..b_n
         for (j=0; j<nDim; j++ ) 
@@ -373,6 +377,9 @@ private:
             SetCol(M_Inv, b, nDim, nDim, j+1);
         };
 
+        delete[] LU;
+        delete[] b;
+        delete[] Indx;
         return true;
     }
 
