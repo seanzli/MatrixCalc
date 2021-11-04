@@ -33,7 +33,43 @@ public:
         m_data = std::vector<double>(a, a + m_size);
     }
 
+    MatrixCalc(const MatrixCalc& op) {
+        m_row = op.getRow();
+        m_col = op.getCol();
+        m_size = m_row * m_col;
+        m_data = std::vector<double>(op.m_data, op.m_data + m_size);
+    }
+
+    MatrixCalc(MatrixCalc&& op) {
+        m_row = op.getRow();
+        m_col = op.getCol();
+        m_size = m_row * m_col;
+        m_data = std::vector<double>(op.m_data, op.m_data + m_size);
+    }
+
     ~MatrixCalc() {};
+
+    MatrixCalc operator=(const MatrixCalc& op) {
+        if (&op == this)
+            return *this;
+        m_row = op.getRow();
+        m_col = op.getCol();
+        m_size = m_row * m_col;
+        m_data = std::vector<double>(op.m_data, op.m_data + m_size);
+        return *this;
+    }
+
+    MatrixCalc operator=(const MatrixCalc& op) {
+        if (&op == this)
+            return *this;
+        m_row = op.getRow();
+        m_col = op.getCol();
+        m_size = m_row * m_col;
+        m_data = std::move(op.m_data);
+        return *this;
+    }
+
+    
 
     inline unsigned rows() const {return m_row;}
     inline unsigned cols() const {return m_col;}
